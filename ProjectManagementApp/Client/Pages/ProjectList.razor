@@ -1,0 +1,84 @@
+﻿@page "/project"
+@inject IProjectService ProjectService
+@inject NavigationManager NavigationManager
+@implements IDisposable
+
+<h3>Projects</h3>
+
+@if (ProjectService.Projects.Count == 0)
+{
+    <span>Loading Projects...</span>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Project Name</th>
+                <th>Project Description</th>
+                <th>Created Date</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in ProjectService.Projects)
+            {
+            <tr>
+                <td>@project.name</td>
+                <td>@project.description</td>
+                <td>@project.createdAt</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="() => ShowProject(project.Id)">Show</button>
+                </td>
+                <td>
+                    <button class="btn btn-info" @onclick="() => EditProject(project.Id)">Edit</button>
+                </td>
+                <td>
+                    <button class="btn btn-danger" @onclick="() => RemoveProject(project.Id)">Remove</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<CreateProject Project="projectToEdit"></CreateProject>
+
+
+@code {
+
+        //List<ProjectManagementApp.Shared.Project> projects = new List<ProjectManagementApp.Shared.Project>();
+
+        ProjectManagementApp.Shared.Project projectToEdit = new ProjectManagementApp.Shared.Project();
+        ProjectManagementApp.Shared.Project project = new ProjectManagementApp.Shared.Project();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ProjectService.GetProjects();
+        ProjectService.OnChange += StateHasChanged;
+
+    }
+
+    void ShowProject(int id)
+    {
+        NavigationManager.NavigateTo($"project/{id}");
+    }
+
+    void EditProject(int id)
+    {
+        projectToEdit = ProjectService.Projects.Find(h => h.Id == id);
+    }
+
+
+    void RemoveProject(int id)
+    {
+        ProjectService.DeleteProject(id);
+        }
+
+    public void Dispose()
+    {
+        ProjectService.OnChange -= StateHasChanged;
+    }
+}

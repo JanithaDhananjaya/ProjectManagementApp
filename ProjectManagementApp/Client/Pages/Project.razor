@@ -1,0 +1,33 @@
+﻿@page "/project/{id:int}"
+@inject IProjectService ProjectService
+
+<h3>Project</h3>
+
+<div class="container">
+    <div class="mb-3 row">
+        <label for="name" class="col-sm-2 col-form-label">Project Name</label>
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="name" value="@project.name">
+        </div>
+    </div>
+    <div class="mb-3 row">
+        <label for="description" class="col-sm-2 col-form-label">Project Description</label>
+        <div class="col-sm-10">
+            <input type="text" readonly class="form-control-plaintext" id="description" value="@project.description">
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    ProjectManagementApp.Shared.Project project = new ProjectManagementApp.Shared.Project();
+
+    protected override async Task OnInitializedAsync()
+    {
+        project = await ProjectService.GetProjectDetails(Id);
+
+    }
+}

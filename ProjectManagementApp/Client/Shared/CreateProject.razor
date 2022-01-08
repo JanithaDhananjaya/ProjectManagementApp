@@ -1,0 +1,44 @@
+﻿@inject IProjectService ProjectService
+
+@if (Project.Id == 0)
+{
+
+
+    <h3>Create New Project</h3>
+}
+else
+{
+    <h3>Edit '@Project.name'</h3>
+}
+
+
+
+<EditForm Model="Project" OnSubmit="HandleSubmit">
+    <div class="form-group">
+        <label>Project Name</label>
+        <InputText class="form-control" @bind-Value="Project.name"></InputText>
+    </div>
+    <div class="form-group">
+        <label>Project Description</label>
+        <InputText class="form-control" @bind-Value="Project.description"></InputText>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+@code {
+
+    [Parameter]
+    public ProjectManagementApp.Shared.Project Project { get; set; } = new ProjectManagementApp.Shared.Project();
+
+    async void HandleSubmit()
+    {
+        if (Project.Id == 0)
+        {
+            await ProjectService.CreateProject(Project);
+        }
+        else
+        {
+            await ProjectService.UpdateProject(Project, Project.Id);
+        }
+    }
+}

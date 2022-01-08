@@ -1,0 +1,64 @@
+﻿@page "/company"
+@inject HttpClient Http
+@inject Microsoft.AspNetCore.Components.NavigationManager navigation
+
+@inject ICompanyService CompanyService
+
+<h3>Company</h3>
+
+@if (company == null)
+{
+    <span>No Company Details!</span>
+}
+else
+{
+    <div class="container">
+        <form class="row g-3">
+            <div class="col-md-12">
+                <img src="https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" class="img-thumbnail" alt="companyLogo">
+            </div>
+            <div class="col-md-6">
+                <label for="name" class="form-label">District</label>
+                <input type="text" id="name" class="form-control" placeholder="Company name" aria-label="Company name" value="@company.name">
+            </div>
+            <div class="col-md-6">
+                <label for="email" class="form-label">District</label>
+                <input type="text" id="email" class="form-control" placeholder="Email address" aria-label="Email address" value="@company.email">
+            </div>
+            <div class="col-md-3">
+                <label for="residenceNo" class="form-label">Residence No.</label>
+                <input type="text" class="form-control" id="residenceNo" value="@company.residenceNo">
+            </div>
+            <div class="col-md-3">
+                <label for="streetName" class="form-label">Street Name</label>
+                <input type="text" class="form-control" id="streetName" value="@company.streetName">
+            </div>
+            <div class="col-md-3">
+                <label for="city" class="form-label">City</label>
+                <input type="text" class="form-control" id="city" value="@company.city">
+            </div>
+            <div class="col-md-3">
+                <label for="district" class="form-label">District</label>
+                <input type="text" class="form-control" id="district" value="@company.district">
+            </div>
+            <div class="col-6">
+                <button type="button" class="btn btn-primary" @onclick="@(async () => await CreateEmployee())">Create</button>
+            </div>
+        </form>
+    </div>
+}
+
+@code {
+    ProjectManagementApp.Shared.Company company = new ProjectManagementApp.Shared.Company();
+    protected override async Task OnInitializedAsync()
+    {
+        company = await CompanyService.GetCompanyProfileDetails();
+
+    }
+
+    protected async Task CreateEmployee()
+    {
+
+    }
+
+}
